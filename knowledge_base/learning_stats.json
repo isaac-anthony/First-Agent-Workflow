@@ -1,0 +1,28 @@
+{
+    "questions": {
+        "How much are the typical contracts and can you tell me more about what you do?": {
+            "count": 1,
+            "status": "monitored"
+        },
+        "Is Brine.ai available for collaboration to automate manual processes for companies offering services like 24-hour emergency service?": {
+            "count": 1,
+            "status": "learned"
+        },
+        "Are you open to a 10-minute chat later this week?": {
+            "count": 1,
+            "status": "monitored"
+        },
+        "What are the different pricing tiers for Brine.ai services and what do they include?": {
+            "count": 1,
+            "status": "monitored"
+        },
+        "Can Brine.ai automate workflows for companies offering 24-hour emergency services like Dickinson Heating and Air Conditioning?": {
+            "count": 1,
+            "status": "monitored"
+        }
+    },
+    "unanswered": [
+        "How much are the typical contracts and can you tell me more about what you do?",
+        "Are you open to a 10-minute chat later this week?"
+    ]
+}

@@ -3,7 +3,7 @@
 This document contains the core information that the AI Agent uses to answer lead questions and draft personalized replies.
 
 ## 1. Company Overview
-Brine.ai builds "Agentic Workflows." We don't just provide chatbots; we build autonomous agents that can scrape data, sync with CRMs, send emails, and handle lead maintenance.
+Brine.ai builds "Agentic Workflows." We don't just provide chatbots; we build autonomous agents that can scrape data, sync with CRMs, send emails, and handle lead maintenance for both B2B (Law Firms, CPAs) and B2C (Restaurants, Retail) industries.
 
 ## 2. PRICING & TIER STRUCTURE
 **Question**: What is included in the $1,000/month "Starter Template" versus the $5,000/month "Enterprise Agent"?
@@ -15,7 +15,7 @@ Brine.ai builds "Agentic Workflows." We don't just provide chatbots; we build au
 
 ## 4. LEAD SCRAPING & VERIFICATION
 **Question**: Where do the leads come from and how do you ensure they are qualified?
-**Answer**: Our agents use Multi-Signal Verification. We scrape from LinkedIn, Apollo, and niche directories. The agent analyzes "Intent Signals" (hiring changes, recent posts, or keyword triggers) and verifies every email through a real-time validation API to keep bounce rates below 1%.
+**Answer**: Our agents use Multi-Signal Verification. We scrape from Google Maps, LinkedIn, and niche directories. The agent focuses on the "Small Business Sweet Spot" (10-50 reviews), identifying businesses that are busy enough to need automation but small enough (2-5 people) for the AI to replace a manual hire. Every email is verified through a real-time MX Record Validation (The Shield) to ensure deliverability and protect sender reputation.
 
 ## 5. INTEGRATIONS & LEGACY SYSTEMS
 **Question**: Can your agent work with my CRM (Hubspot, GoHighLevel, SmartSuite) or old legacy databases?
@@ -63,3 +63,23 @@ Brine.ai builds "Agentic Workflows." We don't just provide chatbots; we build au
 ## 15. SOP: Handling Interest
 When a lead is interested, always thank them for their interest, answer any specific technical questions they have using the information above, and then provide the booking link: https://calendly.com/brine-ai/demo.
 
+## 16. OBJECTION HANDLING BATTLESHEETS
+Use these specific rebuttals when a lead raises an objection:
+
+**Objection: "It's too expensive."**
+*Rebuttal*: Our Starter Tier is priced at $1,000/month specifically to be less than the cost of a part-time virtual assistant. While a human can handle ~20 leads a day, our agent handles hundreds with 100% accuracy. Most clients see a positive ROI within the first 14 days by reclaiming 40+ hours of manual labor.
+
+**Objection: "We already use a CRM / We are all set with tools."**
+*Rebuttal*: That's great! We actually don't replace your CRM; we sit *on top* of it. Most tools like Hubspot or GHL are "passive" databases. Brine.ai is an "active" agent that does the work *inside* those tools—scraping, updating fields, and drafting replies so your team doesn't have to. We integrate via API in minutes.
+
+**Objection: "I don't trust AI to talk to my customers."**
+*Rebuttal*: We completely understand. That's why we use "Human-in-the-Loop" (HITL) protocols. You can set the agent to "Draft-Only" mode where it writes the perfect response, but *you* hit send. Over time, as you see the 99% accuracy, you can toggle on full autonomy. You are always in control of the brand voice.
+
+**Objection: "We are too small for this."**
+*Rebuttal*: Actually, the smaller the team, the bigger the impact. We specialize in "2-5 person teams" where the founder is wearing too many hats. Our goal is to handle the $20/hour tasks (scraping and follow-ups) so you can focus on the $500/hour tasks (closing deals).
+
+
+
+## 17. CUSTOMIZED AUTOMATION FOR SERVICE COMPANIES
+**Question**: Can Brine.ai help companies that offer 24-hour services, like HVAC businesses, automate their manual processes?
+**Answer**: Yes, Brine.ai specializes in automating workflows for a variety of service-oriented businesses, including those offering 24-hour emergency services. Our AI Agents can streamline processes, manage schedules, and enhance customer engagement seamlessly, enabling you to focus on providing top-notch services.

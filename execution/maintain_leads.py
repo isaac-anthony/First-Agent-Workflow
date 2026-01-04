@@ -14,7 +14,15 @@ from google_sheets_client import GoogleSheetsClient
 from gmail_client import GmailClient
 from sentiment_analyzer import SentimentAnalyzer
 from drafting_agent import DraftingAgent
-from send_nurture_email import send_follow_up_email, send_no_interest_email
+from learning_agent import LearningAgent
+from notifier_agent import NotifierAgent
+from send_nurture_email import (
+    send_follow_up_stage_1, 
+    send_follow_up_stage_2, 
+    send_follow_up_stage_3, 
+    send_no_interest_email,
+    send_welcome_back_email
+)
 from send_interested_email import send_interested_reply
 
 load_dotenv()
@@ -32,6 +40,8 @@ async def maintain_leads(tab_name: str = "Sheet1", is_test: bool = False):
     gmail = GmailClient()
     analyzer = SentimentAnalyzer()
     drafter = DraftingAgent()
+    learner = LearningAgent()
+    notifier = NotifierAgent()
     
     rows = sheets.get_all_values(tab_name)
     
@@ -89,12 +99,24 @@ async def maintain_leads(tab_name: str = "Sheet1", is_test: bool = False):
         
         if threads:
             latest_thread = threads[0]
+            
+            # Run Learning Agent on the thread
+            print(f"🧠 RECURSIVE BRAIN: Analyzing thread patterns for {biz_name}...")
+            thread_msgs = gmail.get_full_thread_messages(latest_thread['id'])
+            learner.analyze_thread(thread_msgs)
+
             details = gmail.get_latest_message_details(latest_thread['id'], skip_my_email=not is_test)
             
             if details and details.get('body'):
                 print(f"REPLY DETECTED from {biz_name}. Analyzing sentiment...")
                 sentiment = analyzer.classify_response(details['body'])
                 print(f"SENTIMENT: {sentiment}")
+                
+                # Use extracted sender name if available for better personalization
+                actual_name = details.get('sender_name', lead_name)
+                if actual_name and actual_name != lead_name and actual_name != "Team":
+                    print(f"Updating Lead Name in sheet: {lead_name} -> {actual_name}")
+                    sheets.update_cell(f"B{i}", actual_name, tab_name) # Column B is Lead Name
                 
                 if sentiment == "Not Interested":
                     print(f"LEAD REJECTED: {biz_name}. Sending demo video as REPLY...")
@@ -108,7 +130,7 @@ async def maintain_leads(tab_name: str = "Sheet1", is_test: bool = False):
                         'subject': details['subject']
                     }
                     
-                    result = send_no_interest_email(recipient, lead_name, thread_info=thread_info)
+                    result = send_no_interest_email(recipient, actual_name, thread_info=thread_info)
                     if result['success']:
                         sheets.update_cell(f"J{i}", "Archived (Not Interested)", tab_name)
                         print(f"SUCCESS: Archived {biz_name} and replied in thread.")
@@ -118,8 +140,12 @@ async def maintain_leads(tab_name: str = "Sheet1", is_test: bool = False):
                     print(f"LEAD INTERESTED: {biz_name}! Drafting context-aware reply...")
                     recipient = my_email if is_test else email
                     
+                    # Notify Slack
+                    print(f"✅ INTEREST DETECTED: {biz_name}! Sending Slack Alert...")
+                    notifier.notify_interest(biz_name, actual_name, email, sentiment, details['body'][:200])
+
                     # Use the AI to draft a personalized reply based on the lead's email
-                    drafted_body = drafter.draft_reply(details['body'], lead_name)
+                    drafted_body = drafter.draft_reply(details['body'], actual_name)
                     
                     # Prepare thread info for reply
                     thread_info = {
@@ -129,35 +155,87 @@ async def maintain_leads(tab_name: str = "Sheet1", is_test: bool = False):
                         'subject': details['subject']
                     }
                     
-                    result = send_interested_reply(recipient, lead_name, thread_info=thread_info, custom_body=drafted_body)
+                    result = send_interested_reply(recipient, actual_name, thread_info=thread_info, custom_body=drafted_body)
                     if result['success']:
                         sheets.update_cell(f"J{i}", "Interested (Booking Link Sent)", tab_name)
                         print(f"SUCCESS: Sent drafted reply to {biz_name} and updated sheet.")
                     continue
                 
+                elif sentiment == "OOO":
+                    print(f"LEAD OOO: {biz_name}. Rescheduling follow-up by 7 days.")
+                    reschedule_date = (datetime.now() + timedelta(days=7)).strftime("%Y-%m-%d %H:%M:%S")
+                    sheets.update_cell(f"I{i}", reschedule_date, tab_name) # Push back 'Time Contacted'
+                    sheets.update_cell(f"J{i}", "OOO (Rescheduled)", tab_name)
+                    continue
+
                 elif sentiment == "Neutral":
                     print(f"LEAD NEUTRAL: {biz_name}. Manual review suggested.")
                     sheets.update_cell(f"J{i}", "Pending (Neutral Reply)", tab_name)
 
-        # 2. Logic: Follow-up after 1 week if no response
-        if contacted == "yes" and status in ["", "pending", "none"] and followup_count < 1:
+        # 2. Logic: Multi-Stage Follow-up if no response
+        if contacted == "yes" and status in ["", "pending", "none", "followed up", "ooo (rescheduled)"]:
             try:
                 try:
                     last_contact = datetime.strptime(last_contact_str.split(' ')[0], "%Y-%m-%d")
                 except:
                     continue
                 
-                if (today - last_contact).days >= 7:
-                    print(f"FOLLOW-UP REQUIRED: {biz_name} ({email})")
-                    recipient = my_email if is_test else email
-                    result = send_follow_up_email(recipient, lead_name, biz_name)
+                days_since_contact = (today - last_contact).days
+                recipient = my_email if is_test else email
+                
+                # Fetch thread info for threaded follow-ups
+                search_query = f'"{biz_name}"' if is_test else f"from:{email}"
+                threads = gmail.search_threads(search_query)
+                thread_info = None
+                if threads:
+                    t_details = gmail.get_latest_message_details(threads[0]['id'], skip_my_email=False)
+                    if t_details:
+                        thread_info = {
+                            'gmail_client': gmail,
+                            'thread_id': t_details['thread_id'],
+                            'message_id': t_details['message_id'],
+                            'subject': t_details['subject']
+                        }
+
+                # Stage 0: Welcome Back (from OOO)
+                if status == "ooo (rescheduled)" and days_since_contact >= 0:
+                    print(f"WELCOME BACK FOLLOW-UP (Post-OOO): {biz_name}")
+                    result = send_welcome_back_email(recipient, lead_name, biz_name, thread_info=thread_info)
                     if result['success']:
-                        sheets.update_cell(f"J{i}", "Followed Up", tab_name)
-                        sheets.update_cell(f"K{i}", str(followup_count + 1), tab_name)
+                        sheets.update_cell(f"J{i}", "Followed Up (Post-OOO)", tab_name)
                         sheets.update_cell(f"I{i}", datetime.now().strftime("%Y-%m-%d %H:%M:%S"), tab_name)
-                        print(f"SUCCESS: Sent follow-up to {biz_name}")
+                    continue
+
+                # Stage 1: Day 3 Nudge
+                # FOR TEST MODE: Override days_since_contact to 0 to trigger follow-up immediately
+                if followup_count == 0 and (days_since_contact >= 3 or is_test) and status != "ooo (rescheduled)":
+                    print(f"FOLLOW-UP STAGE 1 (Day 3): {biz_name}")
+                    result = send_follow_up_stage_1(recipient, lead_name, biz_name, thread_info=thread_info)
+                    if result['success']:
+                        sheets.update_cell(f"J{i}", "Followed Up (Stage 1)", tab_name)
+                        sheets.update_cell(f"K{i}", "1", tab_name)
+                        sheets.update_cell(f"I{i}", datetime.now().strftime("%Y-%m-%d %H:%M:%S"), tab_name)
+                
+                # Stage 2: Day 7 Value Add
+                elif followup_count == 1 and (days_since_contact >= 7 or is_test):
+                    print(f"FOLLOW-UP STAGE 2 (Day 7): {biz_name}")
+                    result = send_follow_up_stage_2(recipient, lead_name, biz_name, thread_info=thread_info)
+                    if result['success']:
+                        sheets.update_cell(f"J{i}", "Followed Up (Stage 2)", tab_name)
+                        sheets.update_cell(f"K{i}", "2", tab_name)
+                        sheets.update_cell(f"I{i}", datetime.now().strftime("%Y-%m-%d %H:%M:%S"), tab_name)
+
+                # Stage 3: Day 14 Break-up
+                elif followup_count == 2 and days_since_contact >= 14:
+                    print(f"FOLLOW-UP STAGE 3 (Day 14): {biz_name}")
+                    result = send_follow_up_stage_3(recipient, lead_name, biz_name, thread_info=thread_info)
+                    if result['success']:
+                        sheets.update_cell(f"J{i}", "Archived (No Response)", tab_name)
+                        sheets.update_cell(f"K{i}", "3", tab_name)
+                        sheets.update_cell(f"I{i}", datetime.now().strftime("%Y-%m-%d %H:%M:%S"), tab_name)
+
             except Exception as e:
-                print(f"FAILED: Follow-up for {biz_name}: {e}")
+                print(f"FAILED: Follow-up sequence for {biz_name}: {e}")
 
     print(f"--- MAINTENANCE COMPLETE ---")
 

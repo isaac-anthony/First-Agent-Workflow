@@ -2,28 +2,30 @@
 """
 Layer 3: Execution Script
 Website Data Extractor
-Visits websites to find contact emails and other lead details.
+Visits websites to find contact emails and personalization hooks.
 """
 
 import asyncio
 import re
 import sys
 import json
-from typing import List, Optional
+from typing import List, Optional, Dict, Any
 from playwright.async_api import async_playwright
 from bs4 import BeautifulSoup
 
 # Simple regex for email detection
 EMAIL_REGEX = r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}'
 
-async def extract_emails_from_url(url: str) -> List[str]:
+async def extract_website_data(url: str) -> Dict[str, Any]:
     """
-    Visits a URL and its common contact pages to find email addresses.
+    Visits a URL and its common contact pages to find email addresses 
+    and website snippets for AI personalization.
     """
     if not url or not url.startswith('http'):
-        return []
+        return {"emails": [], "snippet": ""}
 
     emails = set()
+    snippet = ""
     
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=True)
@@ -33,25 +35,39 @@ async def extract_emails_from_url(url: str) -> List[str]:
         page = await context.new_page()
         
         # Helper to scan a page
-        async def scan_page(target_url):
+        async def scan_page(target_url, extract_snippet=False):
+            nonlocal snippet
             try:
                 print(f"Scanning: {target_url}")
                 await page.goto(target_url, wait_until="domcontentloaded", timeout=10000)
                 content = await page.content()
                 
-                # Regex search
+                # Regex search for emails
                 found = re.findall(EMAIL_REGEX, content)
                 for email in found:
-                    # Filter out common junk
                     if not any(ext in email.lower() for ext in ['.png', '.jpg', '.jpeg', '.gif', 'sentry.io']):
                         emails.add(email.lower())
+                
+                # Extract text snippet for AI (About page or homepage)
+                if extract_snippet and not snippet:
+                    # Remove script and style elements
+                    soup = BeautifulSoup(content, 'html.parser')
+                    for script_or_style in soup(["script", "style"]):
+                        script_or_style.decompose()
+                    
+                    # Get text and clean it up
+                    text = soup.get_text(separator=' ')
+                    lines = [line.strip() for line in text.splitlines() if line.strip()]
+                    clean_text = ' '.join(lines)
+                    snippet = clean_text[:3000] # Limit to 3000 chars for AI context
+                    
             except Exception as e:
                 print(f"Error scanning {target_url}: {e}")
 
-        # Scan homepage
-        await scan_page(url)
+        # Scan homepage and get initial snippet
+        await scan_page(url, extract_snippet=True)
         
-        # Try finding contact links
+        # Try finding contact/about links
         contact_links = []
         try:
             links = await page.query_selector_all('a')
@@ -62,20 +78,23 @@ async def extract_emails_from_url(url: str) -> List[str]:
                     if href.startswith('http'):
                         contact_links.append(href)
                     elif href.startswith('/'):
-                        # Join with base URL
                         base = '/'.join(url.split('/')[:3])
                         contact_links.append(f"{base}{href}")
         except:
             pass
 
-        # Scan found contact pages (limit to 2)
+        # Scan found contact/about pages (limit to 2)
         for link in list(set(contact_links))[:2]:
-            if len(emails) >= 3: break # Enough emails
-            await scan_page(link)
+            # If the link text or URL mentions "about" or "team", prefer its snippet over the homepage
+            prefer_new_snippet = any(w in link.lower() for w in ['about', 'team', 'staff'])
+            await scan_page(link, extract_snippet=prefer_new_snippet)
 
         await browser.close()
     
-    return list(emails)
+    return {
+        "emails": list(emails),
+        "snippet": snippet
+    }
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
@@ -83,6 +102,5 @@ if __name__ == "__main__":
         sys.exit(1)
     
     target_url = sys.argv[1]
-    found_emails = asyncio.run(extract_emails_from_url(target_url))
-    print(json.dumps(found_emails))
-
+    data = asyncio.run(extract_website_data(target_url))
+    print(json.dumps(data, indent=2))

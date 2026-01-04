@@ -29,7 +29,7 @@ class DraftingAgent:
 
     def draft_reply(self, lead_text: str, lead_name: str) -> str:
         """
-        Drafts a personalized reply to a lead's email using the knowledge base.
+        Drafts a personalized reply to a lead's email using the knowledge base and objection battlesheets.
         """
         if not self.client:
             return f"Hi {lead_name},\n\nThank you for your interest! I'd love to chat. Book a call here: https://calendly.com/brine-ai/demo"
@@ -39,7 +39,7 @@ class DraftingAgent:
         prompt = f"""
         You are Isaac Gutierrez, Founder of Brine.ai. You are replying to a lead who has just emailed you.
         
-        ### YOUR KNOWLEDGE BASE (SOPs & FAQs):
+        ### YOUR KNOWLEDGE BASE & OBJECTION BATTLESHEETS:
         {kb_content}
         
         ### LEAD'S EMAIL:
@@ -47,11 +47,11 @@ class DraftingAgent:
         
         ### INSTRUCTIONS:
         1. Address the lead by their name: {lead_name}.
-        2. If the lead asked a specific question (e.g., about CRM, pricing, or how it works), use the KNOWLEDGE BASE to answer it accurately.
-        3. If they just expressed general interest, thank them warmly.
-        4. ALWAYS end by inviting them to book a demo call using this link: https://calendly.com/brine-ai/demo
-        5. Keep the tone professional, entrepreneurial, and helpful. 
-        6. Do not make up information that isn't in the knowledge base.
+        2. **DETECT OBJECTIONS**: If the lead mentions price, current tools, trust issues with AI, or being too small/big, use the specific "OBJECTION HANDLING BATTLESHEETS" in the knowledge base to draft a confident, helpful rebuttal.
+        3. **ANSWER QUESTIONS**: If the lead asked a technical question, use the FAQ section to answer it accurately.
+        4. **BE DECISIVE**: Don't just apologize. Explain WHY Brine.ai is the solution to their specific concern.
+        5. **CALL TO ACTION**: ALWAYS end by inviting them to book a demo call using this link: https://calendly.com/brine-ai/demo
+        6. Keep the tone professional, entrepreneurial, and conversational. Avoid "AI-isms".
         
         Draft the reply email now:
         """

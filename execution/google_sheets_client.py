@@ -16,13 +16,44 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
 # If modifying these scopes, delete the file token.json.
-SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
+SCOPES = [
+    'https://www.googleapis.com/auth/spreadsheets',
+    'https://www.googleapis.com/auth/drive.file'
+]
 
 class GoogleSheetsClient:
     def __init__(self, spreadsheet_id: Optional[str] = None):
         self.spreadsheet_id = spreadsheet_id
         self.creds = self._authenticate()
         self.service = build('sheets', 'v4', credentials=self.creds)
+        self.drive_service = build('drive', 'v3', credentials=self.creds)
+
+    def upload_to_drive(self, file_path: str, folder_id: str = None) -> Optional[str]:
+        """Uploads a file to Google Drive and returns the webViewLink."""
+        try:
+            from googleapiclient.http import MediaFileUpload
+            
+            file_metadata = {'name': os.path.basename(file_path)}
+            if folder_id:
+                file_metadata['parents'] = [folder_id]
+            
+            media = MediaFileUpload(file_path, resumable=True)
+            file = self.drive_service.files().create(
+                body=file_metadata,
+                media_body=media,
+                fields='id, webViewLink'
+            ).execute()
+            
+            # Make the file readable by anyone with the link (optional but helpful for the Sheet)
+            self.drive_service.permissions().create(
+                fileId=file.get('id'),
+                body={'type': 'anyone', 'role': 'reader'}
+            ).execute()
+            
+            return file.get('webViewLink')
+        except Exception as e:
+            print(f"Error uploading to Drive: {e}")
+            return None
 
     def _authenticate(self):
         creds = None
@@ -145,9 +176,33 @@ class GoogleSheetsClient:
             print(f"An error occurred marking contacted: {err}")
             return False
 
+    def get_sheet_names(self) -> List[str]:
+        """Returns a list of all tab names in the spreadsheet."""
+        try:
+            spreadsheet = self.service.spreadsheets().get(spreadsheetId=self.spreadsheet_id).execute()
+            return [sheet['properties']['title'] for sheet in spreadsheet.get('sheets', [])]
+        except Exception as e:
+            print(f"Error fetching sheet names: {e}")
+            return []
+
+    def initialize_report_sheet(self):
+        """Initializes headers for the Weekly Reports tab."""
+        tab_name = "Weekly_Reports"
+        headers = [["Week Ending", "Total Leads Scanned", "Total Contacted", "Total Interested", "Pipeline Value ($)", "Avg AI Score", "Executive Summary"]]
+        try:
+            self.create_new_tab(tab_name)
+            self.service.spreadsheets().values().update(
+                spreadsheetId=self.spreadsheet_id,
+                range=f"'{tab_name}'!A1",
+                valueInputOption="USER_ENTERED",
+                body={'values': headers}
+            ).execute()
+        except HttpError as err:
+            print(f"An error occurred initializing report sheet: {err}")
+
     def initialize_sheet(self, tab_name: str = "Sheet1"):
         """Creates headers if the sheet is empty."""
-        headers = [["Business Name", "Lead Name", "Email", "Phone", "Website", "Address", "Date Added", "Contacted?", "Time Contacted", "Status", "Follow-up Count", "AI Lead Score", "AI Score Reason"]]
+        headers = [["Business Name", "Lead Name", "Email", "Phone", "Website", "Address", "Date Added", "Contacted?", "Time Contacted", "Status", "Follow-up Count", "AI Lead Score", "AI Score Reason", "Personalized Hook"]]
         try:
             self.create_new_tab(tab_name)
             # Check if headers already exist

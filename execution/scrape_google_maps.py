@@ -67,15 +67,26 @@ async def scrape_google_maps(query: str, limit: int = 10) -> List[Dict[str, Any]
                     rating = 0.0
                     
                     # Extract Rating and Review Count
-                    rating_el = await page.query_selector('span.ceNzR') # Common class for ratings
+                    # Improved selector for rating/reviews
+                    rating_el = await page.query_selector('span[role="img"][aria-label*="stars"]')
                     if rating_el:
                         rating_text = await rating_el.get_attribute('aria-label')
                         if rating_text:
-                            # Usually "4.8 stars 152 Reviews"
-                            parts = rating_text.split()
                             try:
-                                rating = float(parts[0])
-                                reviews_count = int(parts[2].replace(',', ''))
+                                # Extract rating (usually the first number)
+                                import re
+                                rating_match = re.search(r"(\d+\.?\d*)", rating_text)
+                                if rating_match:
+                                    rating = float(rating_match.group(1))
+                                
+                                # Try to find the reviews count which is usually in a separate span nearby
+                                # or part of the same aria-label in some locales
+                                reviews_el = await page.query_selector('button[aria-label*="reviews"]')
+                                if reviews_el:
+                                    reviews_text = await reviews_el.get_attribute('aria-label')
+                                    reviews_match = re.search(r"(\d+,?\d*)", reviews_text)
+                                    if reviews_match:
+                                        reviews_count = int(reviews_match.group(1).replace(',', ''))
                             except: pass
 
                     # Look for website link

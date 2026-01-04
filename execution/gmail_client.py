@@ -68,6 +68,47 @@ class GmailClient:
             print(f"An error occurred fetching thread details: {error}")
             return {}
 
+    def get_full_thread_messages(self, thread_id: str) -> List[Dict[str, Any]]:
+        """Retrieves all messages in a thread with basic sender/body info."""
+        thread = self.get_thread_details(thread_id)
+        if not thread: return []
+        
+        results = []
+        for msg in thread.get('messages', []):
+            headers = msg.get('payload', {}).get('headers', [])
+            sender = next((h['value'] for h in headers if h['name'].lower() == 'from'), "Unknown")
+            
+            # Extract body
+            payload = msg.get('payload', {})
+            body = ""
+            
+            def extract_parts(parts):
+                for part in parts:
+                    if part['mimeType'] == 'text/plain':
+                        return part.get('body', {}).get('data', "")
+                    if 'parts' in part:
+                        res = extract_parts(part['parts'])
+                        if res: return res
+                return ""
+
+            if 'parts' in payload:
+                body = extract_parts(payload['parts'])
+            else:
+                body = payload.get('body', {}).get('data', "")
+            
+            if body:
+                try:
+                    decoded_body = base64.urlsafe_b64decode(body).decode('utf-8')
+                except:
+                    decoded_body = "[Un-decodable content]"
+                
+                results.append({
+                    "from": sender,
+                    "body": decoded_body,
+                    "id": msg['id']
+                })
+        return results
+
     def get_latest_message_details(self, thread_id: str, skip_my_email: bool = True) -> Optional[Dict[str, Any]]:
         """Extracts the body and message ID of the latest message in a thread."""
         thread = self.get_thread_details(thread_id)
@@ -106,7 +147,18 @@ class GmailClient:
         headers = latest_msg.get('payload', {}).get('headers', [])
         subject = next((h['value'] for h in headers if h['name'].lower() == 'subject'), "")
         msg_id = next((h['value'] for h in headers if h['name'].lower() == 'message-id'), "")
+        from_header = next((h['value'] for h in headers if h['name'].lower() == 'from'), "")
         
+        # Extract sender name from "Name <email@address.com>"
+        sender_name = "Team"
+        if from_header:
+            import re
+            name_match = re.match(r'^"?([^<"]+)"?\s*<', from_header)
+            if name_match:
+                sender_name = name_match.group(1).strip()
+            elif '<' not in from_header:
+                sender_name = from_header.strip()
+
         # Extract body
         payload = latest_msg.get('payload', {})
         body = ""
@@ -130,7 +182,8 @@ class GmailClient:
                 "body": base64.urlsafe_b64decode(body).decode('utf-8'),
                 "message_id": msg_id,
                 "subject": subject,
-                "thread_id": thread_id
+                "thread_id": thread_id,
+                "sender_name": sender_name
             }
         
         return None

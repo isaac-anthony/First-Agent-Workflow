@@ -1,0 +1,8 @@
+[
+    {"niche": "HVAC Companies", "location": "Riverside County", "limit": 10},
+    {"niche": "Plumbing Services", "location": "Orange County", "limit": 10},
+    {"niche": "Real Estate Agents", "location": "Riverside County", "limit": 5},
+    {"niche": "Law Firms", "location": "Newport Beach", "limit": 5},
+    {"niche": "CPAs", "location": "Irvine", "limit": 5},
+    {"niche": "Restaurants", "location": "Laguna Beach", "limit": 5}
+]

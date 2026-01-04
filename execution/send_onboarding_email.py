@@ -66,8 +66,11 @@ def format_company_background(background_text):
     return '\n'.join(formatted_lines)
 
 
-def send_basic_email(to: str, subject: str, body: str) -> dict:
-    """Helper to send a basic email using SMTP."""
+from email.mime.base import MIMEBase
+from email import encoders
+
+def send_basic_email(to: str, subject: str, body: str, is_html: bool = False, attachment_path: str = None) -> dict:
+    """Helper to send a basic email using SMTP, with optional attachment."""
     if not validate_email(to):
         return {"success": False, "message": f"Invalid email format: {to}"}
     
@@ -81,7 +84,21 @@ def send_basic_email(to: str, subject: str, body: str) -> dict:
     msg['From'] = formataddr((sender_name, email_from))
     msg['To'] = to
     msg['Subject'] = subject
-    msg.attach(MIMEText(body, 'plain'))
+    
+    mime_type = 'html' if is_html else 'plain'
+    msg.attach(MIMEText(body, mime_type))
+    
+    if attachment_path and os.path.exists(attachment_path):
+        filename = os.path.basename(attachment_path)
+        with open(attachment_path, "rb") as f:
+            part = MIMEBase("application", "octet-stream")
+            part.set_payload(f.read())
+            encoders.encode_base64(part)
+            part.add_header(
+                "Content-Disposition",
+                f"attachment; filename= {filename}",
+            )
+            msg.attach(part)
     
     try:
         server = smtplib.SMTP(smtp_server, smtp_port)
