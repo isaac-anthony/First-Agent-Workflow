@@ -21,6 +21,7 @@ from personalization_agent import PersonalizationAgent
 from email_verifier import EmailVerifier
 from notifier_agent import NotifierAgent
 from maintain_leads import maintain_leads
+from self_healing_agent import SelfHealingAgent
 
 load_dotenv()
 
@@ -37,11 +38,15 @@ async def process_lead(biz, niche, sheets, scorer, perso, verifier, notifier, ex
 
     # 2. Extract Data from Website
     emails = []
+    social = {"linkedin": "", "facebook": "", "instagram": ""}
     website_snippet = ""
+    automation_gaps = []
     if website:
         web_data = await extract_website_data(website)
         emails = web_data.get('emails', [])
+        social = web_data.get('social', social)
         website_snippet = web_data.get('snippet', "")
+        automation_gaps = web_data.get('automation_gaps', [])
     
     # 2a. Re-Discovery Loop: If no email found, trigger fallback
     if not emails:
@@ -76,9 +81,11 @@ async def process_lead(biz, niche, sheets, scorer, perso, verifier, notifier, ex
     
     # 3b. AI Lead Scoring
     print(f"SCORING LEAD: {name}...")
-    score_data = scorer.score_lead(name, biz.get('reviews_count', 0), biz.get('rating', 0.0))
+    score_data = scorer.score_lead(name, biz.get('reviews_count', 0), biz.get('rating', 0.0), markdown_dna=website_snippet, automation_gaps=automation_gaps)
     lead_score = score_data['score']
     score_reason = score_data['reason']
+    if automation_gaps:
+        score_reason = f"Gaps: {', '.join(automation_gaps)} | {score_reason}"
     print(f"AI SCORE: {lead_score}/10 | Reason: {score_reason}")
 
     # Quality Filter: Skip leads with low scores (under 5)
@@ -99,20 +106,25 @@ async def process_lead(biz, niche, sheets, scorer, perso, verifier, notifier, ex
     
     # 4. Sync to Google Sheets
     sheet_row = [
-        name, 
-        lead_name,
-        email_to_use, 
-        phone, 
-        website, 
-        biz['address'], 
-        datetime.now().strftime("%Y-%m-%d"),
-        "No", # Contacted?
-        "",    # Time Contacted
-        "",    # Status
-        "0",   # Follow-up Count
-        lead_score,
-        score_reason,
-        hook
+        datetime.now().strftime("%Y-%m-%d"), # Date Added
+        "Pending",                           # Status
+        "",                                  # Years in Business
+        name,                                # Business Name
+        niche,                               # Industry
+        lead_score,                          # Lead Score
+        score_reason,                        # Description
+        email_to_use,                        # Email
+        phone,                               # Phone
+        social.get("linkedin", ""),          # LinkedIn
+        social.get("facebook", ""),          # Facebook
+        social.get("instagram", ""),         # Instagram
+        biz.get('reviews_count', 0),         # Review Count
+        hook,                                # Personalized Hook
+        website,                             # Website
+        lead_name,                           # Lead Name
+        "No",                                # Contacted?
+        "",                                  # Time Contacted
+        "0"                                  # Follow-up Count
     ]
     
     return {
@@ -124,7 +136,7 @@ async def process_lead(biz, niche, sheets, scorer, perso, verifier, notifier, ex
         "hook": hook
     }
 
-async def run_campaign(target: dict, sheets: GoogleSheetsClient, scorer: ScoringAgent, perso: PersonalizationAgent, verifier: EmailVerifier, notifier: NotifierAgent, test_email: str = None):
+async def run_campaign(target: dict, sheets: GoogleSheetsClient, scorer: ScoringAgent, perso: PersonalizationAgent, verifier: EmailVerifier, notifier: NotifierAgent, test_email: str = None, healer: SelfHealingAgent = None):
     """
     Executes a single campaign for a specific niche and location using ASYNCHRONOUS processing.
     """
@@ -132,7 +144,7 @@ async def run_campaign(target: dict, sheets: GoogleSheetsClient, scorer: Scoring
     location = target['location']
     limit = target.get('limit', 5)
     query = f"{niche} in {location}"
-    tab_name = niche.replace(' ', '_').replace('&', 'n')
+    tab_name = "Sheet2"
     
     print(f"\n--- STARTING CAMPAIGN: {query} (ASYNCHRONOUS) ---")
     sheets.initialize_sheet(tab_name)
@@ -175,23 +187,62 @@ async def run_campaign(target: dict, sheets: GoogleSheetsClient, scorer: Scoring
                     sheets.append_leads([res["row"]], tab_name=tab_name)
                     stats["synced"] += 1
                     
-                    # Outreach
+                    # Self-Healing Agent Validation (prevents duplicates and issues)
+                    last_row = sheets.get_last_row(tab_name)
+                    row_data_dict = {
+                        'contacted': 'no',  # New lead, not contacted yet
+                        'status': '',
+                        'lead_name': res["lead_name"],
+                        'email': res["email"]
+                    }
+                    
+                    # Use healer if available, otherwise use basic check
+                    if healer:
+                        is_valid, reason = healer.validate_before_send(
+                            res["email"], res["lead_name"], res["biz_name"], 
+                            row_data_dict, tab_name
+                        )
+                        if not is_valid:
+                            print(f"SKIPPING EMAIL: {res['biz_name']} - {reason}")
+                            continue
+                    else:
+                        # Basic check: Get the row data to check "Contacted?" status
+                        row_data = sheets.get_all_values(tab_name)
+                        if row_data and len(row_data) > last_row - 1:
+                            headers = row_data[0]
+                            if len(row_data) >= last_row:
+                                current_row = row_data[last_row - 1]
+                                try:
+                                    col_contacted_idx = headers.index("Contacted?")
+                                    if len(current_row) > col_contacted_idx and current_row[col_contacted_idx].strip().lower() == "yes":
+                                        print(f"SKIPPING EMAIL: {res['biz_name']} already marked as contacted")
+                                        continue
+                                except (ValueError, IndexError):
+                                    pass
+                    
+                    # Outreach - ONLY send if validation passed
                     recipient = test_email if test_email else res["email"]
                     print(f"SENDING OUTREACH TO {recipient}...")
                     
                     email_result = send_brine_intro_email(recipient, res["lead_name"], res["biz_name"], niche, hook=res["hook"])
                     if email_result['success']:
                         print(f"EMAIL SENT: {res['biz_name']}")
-                        last_row = sheets.get_last_row(tab_name)
+                        # Mark as contacted immediately after sending
                         sheets.mark_as_contacted(last_row, tab_name=tab_name)
                         stats["contacted"] += 1
+                        # Rate limiting: Randomized delay (10-20 seconds) to prevent blocking
+                        import random
+                        delay = random.uniform(10, 20)
+                        print(f"    Waiting {delay:.1f} seconds before next email (prevents blocking)...")
+                        await asyncio.sleep(delay)
+                    else:
+                        print(f"EMAIL FAILED: {res['biz_name']} - {email_result.get('message', 'Unknown error')}")
                 except Exception as e:
+                    import traceback
                     print(f"Error syncing lead: {e}")
+                    print(f"Traceback: {traceback.format_exc()}")
             elif res["status"] == "disqualified":
                 stats["disqualified"] += 1
-
-    print(f"--- CAMPAIGN {query} COMPLETE ---")
-    return stats
 
     print(f"--- CAMPAIGN {query} COMPLETE ---")
     return stats
@@ -222,20 +273,41 @@ async def run_multi_niche_workflow(config_path: str, test_email: str = None):
     perso = PersonalizationAgent()
     verifier = EmailVerifier()
     notifier = NotifierAgent()
+    healer = SelfHealingAgent()  # Self-healing agent for autonomous validation
 
-    # 0. Maintenance Phase
-    print("--- STARTING GLOBAL MAINTENANCE ---")
-    for target in targets:
-        tab_name = target['niche'].replace(' ', '_').replace('&', 'n')
-        try:
-            await maintain_leads(tab_name, is_test=(test_email is not None))
-        except Exception as e:
-            print(f"Maintenance failed for {tab_name}: {e}")
-    print("--- GLOBAL MAINTENANCE COMPLETE ---")
+    # 0. Maintenance Phase (ONLY for existing leads, NOT for new campaigns)
+    # Skip maintenance before campaigns to prevent duplicate emails
+    # Maintenance should be run separately via maintain_leads.py
+    print("--- SKIPPING MAINTENANCE (Run separately to avoid duplicate emails) ---")
+    
+    sheets.initialize_sheet("Sheet2")
 
     # 1. Discovery & Outreach Phase
     for target in targets:
-        await run_campaign(target, sheets, scorer, perso, verifier, notifier, test_email)
+        stats = await run_campaign(target, sheets, scorer, perso, verifier, notifier, test_email, healer)
+        
+        # After each campaign, notify the main email
+        if stats["synced"] > 0:
+            print(f"NOTIFYING OWNER of {stats['synced']} new leads...")
+            admin_email = os.getenv("REPORT_EMAIL", "04isaacag@gmail.com")
+            subject = f"Campaign Complete: {stats['synced']} New Leads for {target['niche']}"
+            body = f"""Hi Isaac,
+
+The lead engine has successfully processed a new batch of leads.
+
+- Campaign: {target['niche']} in {target['location']}
+- New Leads Synced: {stats['synced']}
+- Emails Sent: {stats['contacted']}
+
+All leads have been added to the master 'Sheet2' tab in your Google Sheet.
+
+Best Regards,
+
+Isaac Gutierrez | Founder & Architect Brine.ai Consulting
+brineaiconsulting.com"""
+            # Use send_basic_email instead of intro email to avoid the 100 leads template
+            from send_onboarding_email import send_basic_email
+            send_basic_email(admin_email, subject, body)
 
     print("\n--- ALL CAMPAIGNS COMPLETE ---")
 

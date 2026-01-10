@@ -5,6 +5,15 @@ This document contains the core information that the AI Agent uses to answer lea
 ## 1. Company Overview
 Brine.ai builds "Agentic Workflows." We don't just provide chatbots; we build autonomous agents that can scrape data, sync with CRMs, send emails, and handle lead maintenance for both B2B (Law Firms, CPAs) and B2C (Restaurants, Retail) industries.
 
+## 1.5. BRAND OVERVIEW
+Brine Ai Consulting builds and deploys custom autonomous agents engineered by UC Berkeley Alum and former database architects. The platform acts as a "Brain" for your business, integrating seamlessly into your stack to automate sales, support, and operations with zero additional headcount.
+
+**Key Capabilities:**
+- **The Brain**: Codifies tribal knowledge into high-fidelity AI SOPs so agents act as subject matter experts.
+- **Custom Discovery**: Identifies 250+ qualified businesses monthly based on your exact ideal customer profile.
+- **Universal Connectivity**: Integrates with tools like Slack, Gmail, HubSpot, and Salesforce.
+- **Tone-Matched Logic**: Ensures every interaction feels like a human member of your team.
+
 ## 2. PRICING & TIER STRUCTURE
 **Question**: What is included in the $1,000/month "Starter Template" versus the $5,000/month "Enterprise Agent"?
 **Answer**: The Starter Tier ($1,000) includes one out-of-the-box outreach automation template, single-channel scraping (LinkedIn or Email), and basic knowledge base integration. The Enterprise Tier ($5,000) includes full multi-agent orchestrators, cross-platform workflows, unlimited data sources, 1-on-1 technical consulting, and deep-link API integrations into proprietary software.
@@ -83,3 +92,26 @@ Use these specific rebuttals when a lead raises an objection:
 ## 17. CUSTOMIZED AUTOMATION FOR SERVICE COMPANIES
 **Question**: Can Brine.ai help companies that offer 24-hour services, like HVAC businesses, automate their manual processes?
 **Answer**: Yes, Brine.ai specializes in automating workflows for a variety of service-oriented businesses, including those offering 24-hour emergency services. Our AI Agents can streamline processes, manage schedules, and enhance customer engagement seamlessly, enabling you to focus on providing top-notch services.
+
+## 18. LEAD Q&A (Frequently Asked Questions)
+
+**1. What exactly does Brine.ai do?**
+We build custom autonomous agents that handle your "Front-of-House" operations—including prospecting, lead scoring, and outreach. Essentially, we act as a Brain for your business; you can ask it any question, and it will provide an answer because it is fully trained on your specific business data.
+
+**2. How much does your service cost?**
+We offer flat-rate pricing tiers for our standard buildouts. However, as of now, we are willing to work with the price depending on the specific workflows and integrations your business requires to ensure the solution fits your architecture perfectly.
+
+**3. What specific buildouts do you currently offer?**
+We currently offer three specialized tiers designed for different stages of growth:
+- **The Solo Pilot**: Ideal for solo owners wanting to automate their first sales loop and find ideal customers.
+- **The SDR Agent**: A complete autonomous sales department that discovery, outreach, and CRM updates in real-time.
+- **The Knowledge Architect (Customer Support)**: An "Intelligent Brain" that live-syncs with your data to solve complex customer problems instantly.
+
+**4. How do your agents "learn" my business?**
+We use Institutional Memory to train your agents on your specific case studies, whitepapers, and pricing sheets. This ensures your agents act as 24/7 subject matter experts that reflect your brand's specific logic and ethics.
+
+**5. How are your leads better than a standard database?**
+Our agents "hunt" 24/7 based on your exact standards, delivering fresh leads rather than static info. Every lead is verified and scored (1–10) based on their actual website data and business intent before being sent to you.
+
+**6. What tools can you integrate with?**
+We offer total stack integration with any tool that has an API or application. This includes Salesforce, HubSpot, Calendly, Gmail, Slack, and Google Sheets.

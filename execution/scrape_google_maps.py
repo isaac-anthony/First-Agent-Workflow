@@ -79,15 +79,37 @@ async def scrape_google_maps(query: str, limit: int = 10) -> List[Dict[str, Any]
                                 if rating_match:
                                     rating = float(rating_match.group(1))
                                 
-                                # Try to find the reviews count which is usually in a separate span nearby
-                                # or part of the same aria-label in some locales
+                                # Try to find the reviews count
+                                # Search for the button with aria-label containing 'reviews' or just the text
                                 reviews_el = await page.query_selector('button[aria-label*="reviews"]')
+                                if not reviews_el:
+                                    # Fallback: look for a span or button containing the word 'reviews'
+                                    reviews_el = await page.query_selector('span[aria-label*="reviews"]')
+                                
                                 if reviews_el:
                                     reviews_text = await reviews_el.get_attribute('aria-label')
-                                    reviews_match = re.search(r"(\d+,?\d*)", reviews_text)
+                                    # Handle both "123 reviews" and "1,234 reviews"
+                                    # We look for the number immediately followed by space and 'reviews' or just the number in the label
+                                    import re
+                                    reviews_match = re.search(r"(\d+[,.]?\d*)\s*reviews", reviews_text.lower())
+                                    if not reviews_match:
+                                        # Alternative: just find the first number in the button/span label
+                                        reviews_match = re.search(r"(\d+[,.]?\d*)", reviews_text)
+                                    
                                     if reviews_match:
-                                        reviews_count = int(reviews_match.group(1).replace(',', ''))
-                            except: pass
+                                        reviews_count = int(reviews_match.group(1).replace(',', '').replace('.', ''))
+                                    
+                                # Final fallback: try to find any text in the sidebar that matches the pattern
+                                if reviews_count == 0:
+                                    sidebar = await page.query_selector('div[role="main"]')
+                                    if sidebar:
+                                        sidebar_text = await sidebar.inner_text()
+                                        match = re.search(r"(\d+[,.]?\d*)\s*reviews", sidebar_text.lower())
+                                        if match:
+                                            reviews_count = int(match.group(1).replace(',', '').replace('.', ''))
+                            except Exception as e:
+                                print(f"Error parsing reviews: {e}")
+                                pass
 
                     # Look for website link
                     website_el = await page.query_selector('a[data-item-id="authority"]')

@@ -160,11 +160,15 @@ class GoogleSheetsClient:
             return False
 
     def mark_as_contacted(self, row_index: int, tab_name: str = "Sheet1"):
-        """Updates the 'Contacted?' and 'Time Contacted' columns (H and I)."""
+        """Updates the 'Status', 'Contacted?', and 'Time Contacted' columns (B, Q, R)."""
         now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        range_name = f"'{tab_name}'!H{row_index}:I{row_index}"
-        body = {'values': [["Yes", now]]}
         try:
+            # Update Status (B)
+            self.update_cell(f"B{row_index}", "Pending", tab_name)
+            
+            # Update Contacted? (Q) and Time Contacted (R)
+            range_name = f"'{tab_name}'!Q{row_index}:R{row_index}"
+            body = {'values': [["Yes", now]]}
             self.service.spreadsheets().values().update(
                 spreadsheetId=self.spreadsheet_id,
                 range=range_name,
@@ -202,7 +206,7 @@ class GoogleSheetsClient:
 
     def initialize_sheet(self, tab_name: str = "Sheet1"):
         """Creates headers if the sheet is empty."""
-        headers = [["Business Name", "Lead Name", "Email", "Phone", "Website", "Address", "Date Added", "Contacted?", "Time Contacted", "Status", "Follow-up Count", "AI Lead Score", "AI Score Reason", "Personalized Hook"]]
+        headers = [["Date Added", "Status", "Years in Business", "Business Name", "Industry", "Lead Score", "Description", "Email", "Phone", "LinkedIn", "Facebook", "Instagram", "Review Count", "Personalized Hook", "Website", "Lead Name", "Contacted?", "Time Contacted", "Follow-up Count"]]
         try:
             self.create_new_tab(tab_name)
             # Check if headers already exist

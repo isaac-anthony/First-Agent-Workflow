@@ -1,0 +1,7 @@
+[
+    {"niche": "Solar Panel Installers", "location": "Los Angeles, CA", "limit": 5},
+    {"niche": "Solar Panel Installers", "location": "San Diego, CA", "limit": 5},
+    {"niche": "Commercial Roofing Contractors", "location": "Dallas, TX", "limit": 5},
+    {"niche": "Commercial HVAC Contractors", "location": "Houston, TX", "limit": 5},
+    {"niche": "Personal Injury Attorneys", "location": "Phoenix, AZ", "limit": 5}
+]

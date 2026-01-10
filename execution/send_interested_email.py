@@ -20,31 +20,32 @@ def send_interested_reply(lead_email: str, lead_name: str, thread_info: dict = N
     
     subject = f"Next Steps: Brine.ai x {lead_name}"
     
-    body = custom_body or f"""Hi {lead_name},
-
-That's great to hear! I'm thrilled you're interested in learning more about how Brine.ai can help scale your operations with AI agents.
-
-To make things easy, here is a link to my calendar where you can grab a 15-minute slot that works best for you:
-
-Book Your Demo Here: {BOOKING_LINK}
-
-I'm looking forward to speaking with you and showing you what we can do!
-
-Best regards,
-
-{sender_name}
-Founder, {company_name}
-"""
+    body = custom_body or f"""Hi {lead_name},<br><br>
+    That's great to hear! I'm thrilled you're interested in learning more about how {company_name} can help scale your operations with AI agents.<br><br>
+    To make things easy, here is a link to my calendar where you can grab a 15-minute slot that works best for you:<br><br>
+    Book Your Demo Here: {BOOKING_LINK}<br><br>
+    I'm looking forward to speaking with you and showing you what we can do!<br><br>
+    Best Regards,<br><br>
+    Isaac Gutierrez | Founder & Architect @ Brine.ai Consulting<br>
+    brineaiconsulting.com
+    """
+    
+    body_html = f"""
+    <div style="font-family: Arial, sans-serif; font-size: 14px; color: #000000; line-height: 1.5;">
+        {body}
+    </div>
+    """
     
     if thread_info and 'gmail_client' in thread_info:
         gmail = thread_info['gmail_client']
         return gmail.send_reply(
             to=lead_email,
             subject=thread_info.get('subject', subject),
-            body=body,
+            body=body_html,
             thread_id=thread_info['thread_id'],
-            in_reply_to=thread_info['message_id']
+            in_reply_to=thread_info['message_id'],
+            is_html=True
         )
     
-    return send_basic_email(lead_email, subject, body)
+    return send_basic_email(lead_email, subject, body_html, is_html=True)
 

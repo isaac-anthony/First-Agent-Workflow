@@ -18,7 +18,7 @@ Note: Company background bullet points are no longer used - the email template h
 3. Personalize the email with client name (if provided) or use "Hi,"
 4. Use the fixed email template with professional value proposition
 5. Include calendar link for kickoff call (defaults to example link if not configured)
-6. Send email via Gmail SMTP (defaults to 04isaacag@gmail.com)
+6. Send email via Gmail SMTP (defaults to brineaiconsulting@gmail.com)
 7. Confirm delivery status
 
 ## Outputs
@@ -29,7 +29,7 @@ Note: Company background bullet points are no longer used - the email template h
 The following environment variables can be set in `.env` (defaults shown):
 - `SMTP_SERVER` - SMTP server address (default: smtp.gmail.com)
 - `SMTP_PORT` - SMTP port (default: 587)
-- `EMAIL_FROM` - Sender email address (default: 04isaacag@gmail.com)
+- `EMAIL_FROM` - Sender email address (default: brineaiconsulting@gmail.com)
 - `EMAIL_PASSWORD` - Email password or app-specific password (required)
 - `COMPANY_NAME` - Your company name (required)
 - `COMPANY_BACKGROUND` - Company background (optional, can be provided per-email)

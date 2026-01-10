@@ -1,0 +1,55 @@
+{
+  "placeholder_domains": [
+    "example.com",
+    "domain.com",
+    "mysite.com",
+    "test.com",
+    "sample.com",
+    "placeholder.com",
+    "yourdomain.com",
+    "yoursite.com",
+    "website.com",
+    "email.com",
+    "mail.com",
+    "contact.com"
+  ],
+  "placeholder_local_parts": [
+    "johndoe",
+    "janedoe",
+    "user",
+    "test",
+    "sample",
+    "demo",
+    "placeholder",
+    "example",
+    "admin",
+    "info",
+    "contact",
+    "support",
+    "sales",
+    "noreply",
+    "no-reply",
+    "donotreply"
+  ],
+  "suspicious_patterns": [
+    {
+      "pattern": "^[a-z]+@[a-z]+\\.com$",
+      "description": "Generic pattern like 'user@domain.com'",
+      "confidence": 0.7
+    },
+    {
+      "pattern": "^(test|demo|sample|example)@",
+      "description": "Test/demo email addresses",
+      "confidence": 0.9
+    },
+    {
+      "pattern": "@(example|domain|mysite|test|sample)\\.com$",
+      "description": "Known placeholder domains",
+      "confidence": 1.0
+    }
+  ],
+  "learned_fake_emails": [],
+  "failed_emails": [],
+  "last_updated": null
+}
+

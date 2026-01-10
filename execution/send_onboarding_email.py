@@ -10,7 +10,7 @@ Arguments:
     client_name: Optional name of the client for personalization
 
 Environment variables required:
-    SMTP_SERVER, SMTP_PORT, EMAIL_FROM (defaults to 04isaacag@gmail.com), 
+    SMTP_SERVER, SMTP_PORT, EMAIL_FROM (defaults to brineaiconsulting@gmail.com), 
     EMAIL_PASSWORD, COMPANY_NAME, CALENDAR_LINK (defaults to example link), SENDER_NAME
 
 Note: The email template is fixed and always produces the same professional output.
@@ -19,9 +19,14 @@ Note: The email template is fixed and always produces the same professional outp
 import os
 import sys
 import smtplib
+import time
+import random
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from email.utils import formataddr
+from email.utils import formataddr, formatdate
+from datetime import datetime
+import time
+import random
 import re
 from dotenv import load_dotenv
 
@@ -74,9 +79,19 @@ def send_basic_email(to: str, subject: str, body: str, is_html: bool = False, at
     if not validate_email(to):
         return {"success": False, "message": f"Invalid email format: {to}"}
     
+    # Check Gmail rate limits
+    try:
+        from gmail_rate_limiter import GmailRateLimiter
+        limiter = GmailRateLimiter()
+        can_send, reason = limiter.can_send()
+        if not can_send:
+            return {"success": False, "message": f"Gmail rate limit: {reason}"}
+    except Exception as e:
+        print(f"Warning: Could not check rate limits: {e}")
+    
     smtp_server = get_env_var('SMTP_SERVER', default='smtp.gmail.com')
     smtp_port = int(get_env_var('SMTP_PORT', default='587'))
-    email_from = get_env_var('EMAIL_FROM', default='04isaacag@gmail.com')
+    email_from = get_env_var('EMAIL_FROM', default='brineaiconsulting@gmail.com')
     email_password = get_env_var('EMAIL_PASSWORD')
     sender_name = get_env_var('SENDER_NAME', default='Isaac Gutierrez')
     
@@ -84,6 +99,11 @@ def send_basic_email(to: str, subject: str, body: str, is_html: bool = False, at
     msg['From'] = formataddr((sender_name, email_from))
     msg['To'] = to
     msg['Subject'] = subject
+    msg['Date'] = formatdate(localtime=True)
+    msg['Message-ID'] = f"<{datetime.now().timestamp()}.{hash(to)}@{email_from.split('@')[1]}>"
+    msg['Reply-To'] = email_from
+    msg['X-Mailer'] = 'Brine.ai Agentic Workflow'
+    msg['X-Priority'] = '3'  # Normal priority
     
     mime_type = 'html' if is_html else 'plain'
     msg.attach(MIMEText(body, mime_type))
@@ -100,15 +120,97 @@ def send_basic_email(to: str, subject: str, body: str, is_html: bool = False, at
             )
             msg.attach(part)
     
-    try:
-        server = smtplib.SMTP(smtp_server, smtp_port)
-        server.starttls()
-        server.login(email_from, email_password)
-        server.sendmail(email_from, to, msg.as_string())
-        server.quit()
-        return {"success": True, "message": f"Email sent to {to}"}
+    # Retry logic with exponential backoff
+    max_retries = 3
+    retry_delay = 5
+    
+    for attempt in range(max_retries):
+        try:
+            server = smtplib.SMTP(smtp_server, smtp_port, timeout=30)
+            server.set_debuglevel(0)  # Disable debug to reduce noise
+            server.starttls()
+            server.login(email_from, email_password)
+            
+            # Send with proper error handling
+            failed_recipients = server.sendmail(email_from, to, msg.as_string())
+            server.quit()
+            
+            # Check if any recipients failed
+            if failed_recipients:
+                error_msg = f"Some recipients failed: {failed_recipients}"
+                _learn_from_email_failure(to, error_msg)
+                return {"success": False, "message": error_msg}
+            
+            # Record successful send
+            try:
+                from gmail_rate_limiter import GmailRateLimiter
+                limiter = GmailRateLimiter()
+                limiter.record_send(success=True)
+            except:
+                pass
+            
+            return {"success": True, "message": f"Email sent to {to}"}
+            
+        except (smtplib.SMTPDataError, smtplib.SMTPServerDisconnected) as e:
+            # Temporary errors - retry with backoff
+            if attempt < max_retries - 1:
+                wait_time = retry_delay * (2 ** attempt)  # Exponential backoff
+                print(f"   ⚠️  Temporary error (attempt {attempt + 1}/{max_retries}), retrying in {wait_time}s...")
+                time.sleep(wait_time)
+                continue
+            else:
+                # Final attempt failed
+                error_msg = f"Gmail Error after {max_retries} attempts: {str(e)}"
+                print(f"❌ {error_msg}")
+                _learn_from_email_failure(to, error_msg)
+                return {"success": False, "message": error_msg}
+    except smtplib.SMTPAuthenticationError as e:
+        error_msg = f"Gmail Authentication Error: {str(e)}"
+        print(f"❌ {error_msg}")
+        print("   → Check if App Password is correct and not expired")
+        _learn_from_email_failure(to, error_msg)
+        return {"success": False, "message": error_msg}
+    except smtplib.SMTPSenderRefused as e:
+        error_msg = f"Gmail Sender Refused: {str(e)}"
+        print(f"❌ {error_msg}")
+        print("   → Account may be locked or daily limit exceeded (500 emails/day)")
+        print("   → Check: https://myaccount.google.com/security")
+        _learn_from_email_failure(to, error_msg)
+        return {"success": False, "message": error_msg}
+    except smtplib.SMTPDataError as e:
+        error_msg = f"Gmail Data Error: {str(e)}"
+        error_code = str(e).split()[0] if str(e).split() else ""
+        print(f"❌ {error_msg}")
+        if "550" in error_code or "551" in error_code or "553" in error_code:
+            print("   → Gmail is blocking this email (spam/security lock)")
+            print("   → Account may need security verification")
+        _learn_from_email_failure(to, error_msg)
+        return {"success": False, "message": error_msg}
+    except smtplib.SMTPRecipientsRefused as e:
+        error_msg = f"Gmail Recipient Refused: {str(e)}"
+        print(f"❌ {error_msg}")
+        _learn_from_email_failure(to, error_msg)
+        return {"success": False, "message": error_msg}
     except Exception as e:
-        return {"success": False, "message": f"Error: {str(e)}"}
+        error_msg = str(e)
+        print(f"❌ Email Error: {error_msg}")
+        # Self-healing: Learn from email failures
+        _learn_from_email_failure(to, error_msg)
+        return {"success": False, "message": f"Error: {error_msg}"}
+
+def _learn_from_email_failure(email: str, error: str):
+    """Self-healing: Track email failures and learn from them."""
+    try:
+        sys.path.append(os.path.dirname(__file__))
+        from email_verifier import EmailVerifier
+        verifier = EmailVerifier()
+        
+        # Check if error indicates fake/invalid email
+        if any(keyword in error.lower() for keyword in ['invalid', 'not found', 'does not exist', 'no such user', '550', '551', '553', 'bounce', 'undeliverable']):
+            verifier.learn_from_failure(email, error)
+            print(f"🔒 LEARNED: Marked {email} as fake/invalid due to: {error[:100]}")
+    except Exception as e:
+        print(f"Warning: Could not learn from email failure: {e}")
 
 def create_email_content(client_email, client_name=None, company_background=None):
     """Create the email content with fixed professional template."""
@@ -124,25 +226,24 @@ def create_email_content(client_email, client_name=None, company_background=None
         greeting = "Hi,"
     
     # Build email body with the fixed professional template
-    body = f"""{greeting}
-
-Thank you for choosing {company_name}! We are thrilled to have you on board and are looking forward to working with you.
-
-We are excited to begin incorporating our AI agents into your workflow to help your business run as efficiently as possible. Our goal is to ensure your operations are streamlined, scalable, and powered by the best agentic technology available.
-
-Next Steps: We'd love to schedule a kickoff call to discuss your specific needs and map out how we can best serve you. Please use the link below to book a time that works for your schedule:
-
-Book Your Kickoff Call Here {calendar_link}
-
-We're looking forward to building something great together!
-
-Best regards,
-
-{sender_name}
-Founder, {company_name}
+    body = f"""{greeting}<br><br>
+Thank you for choosing {company_name}! We are thrilled to have you on board and are looking forward to working with you.<br><br>
+We are excited to begin incorporating our AI agents into your workflow to help your business run as efficiently as possible. Our goal is to ensure your operations are streamlined, scalable, and powered by the best agentic technology available.<br><br>
+Next Steps: We'd love to schedule a kickoff call to discuss your specific needs and map out how we can best serve you. Please use the link below to book a time that works for your schedule:<br><br>
+Book Your Kickoff Call Here {calendar_link}<br><br>
+We're looking forward to building something great together!<br><br>
+Best Regards,<br><br>
+Isaac Gutierrez | Founder & Architect @ Brine.ai Consulting<br>
+brineaiconsulting.com
 """
     
-    return body
+    body_html = f"""
+    <div style="font-family: Arial, sans-serif; font-size: 14px; color: #000000; line-height: 1.5;">
+        {body}
+    </div>
+    """
+    
+    return body_html
 
 
 def send_onboarding_email(client_email, client_name=None, company_background=None):
@@ -168,7 +269,7 @@ def send_onboarding_email(client_email, client_name=None, company_background=Non
     try:
         smtp_server = get_env_var('SMTP_SERVER', default='smtp.gmail.com')
         smtp_port = int(get_env_var('SMTP_PORT', default='587'))
-        email_from = get_env_var('EMAIL_FROM', default='04isaacag@gmail.com')
+        email_from = get_env_var('EMAIL_FROM', default='brineaiconsulting@gmail.com')
         email_password = get_env_var('EMAIL_PASSWORD')
         company_name = get_env_var('COMPANY_NAME')
         sender_name = get_env_var('SENDER_NAME')
@@ -185,8 +286,8 @@ def send_onboarding_email(client_email, client_name=None, company_background=Non
     msg['Subject'] = f'Welcome to {company_name} – Let\'s get started!'
     
     # Add body (using fixed professional template)
-    body = create_email_content(client_email, client_name)
-    msg.attach(MIMEText(body, 'plain'))
+    body_html = create_email_content(client_email, client_name)
+    msg.attach(MIMEText(body_html, 'html'))
     
     # Send email
     try:

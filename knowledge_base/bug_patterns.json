@@ -1,0 +1,88 @@
+{
+  "patterns": {
+    "control_flow_unreachable_code": {
+      "description": "Code after continue/return statements becomes unreachable",
+      "severity": "critical",
+      "detection": [
+        "Look for continue/return followed by non-comment code",
+        "Check if critical logic comes after early exit statements"
+      ],
+      "prevention": [
+        "Put all processing logic INSIDE condition blocks",
+        "Never place code after continue/return in same block",
+        "Use code linters to detect unreachable code"
+      ],
+      "examples": [
+        {
+          "bad": "if condition:\n    print('Processing')\nelif other:\n    continue\n    process_data()  # NEVER EXECUTES",
+          "good": "if condition:\n    print('Processing')\n    process_data()  # Executes correctly\nelif other:\n    continue"
+        }
+      ],
+      "first_detected": "2026-01-08",
+      "files_affected": ["execution/maintain_leads.py"]
+    },
+    "column_index_mismatch": {
+      "description": "Hardcoded column letters don't match actual sheet header structure",
+      "severity": "high",
+      "detection": [
+        "Compare hardcoded column letters (P, Q, R) with header structure",
+        "Verify initialize_sheet() headers match all update_cell() calls",
+        "Check for column letter mismatches across multiple files"
+      ],
+      "prevention": [
+        "Never hardcode column letters - always derive from headers",
+        "Create helper function: get_column_letter(header_name)",
+        "Use column name constants instead of letters",
+        "Verify column mappings match between initialize_sheet() and all update operations"
+      ],
+      "examples": [
+        {
+          "bad": "sheets.update_cell(f'P{i}', 'Yes', tab_name)  # Wrong column!",
+          "good": "col_idx = headers.index('Contacted?')\ncol_letter = chr(65 + col_idx)\nsheets.update_cell(f'{col_letter}{i}', 'Yes', tab_name)"
+        }
+      ],
+      "first_detected": "2026-01-08",
+      "files_affected": [
+        "execution/google_sheets_client.py",
+        "execution/send_pending_emails.py",
+        "execution/maintain_leads.py"
+      ],
+      "correct_mappings": {
+        "Contacted?": "Q",
+        "Time Contacted": "R",
+        "Follow-up Count": "S",
+        "Status": "B",
+        "Lead Name": "P"
+      }
+    },
+    "inconsistent_column_references": {
+      "description": "Different files use different column letters for the same data",
+      "severity": "high",
+      "detection": [
+        "Search for all update_cell() calls with column letters",
+        "Compare column letters used across all files",
+        "Verify they match the header structure"
+      ],
+      "prevention": [
+        "Create a single source of truth for column mappings",
+        "Use shared constants or helper functions",
+        "Verify all files use the same column references"
+      ],
+      "first_detected": "2026-01-08",
+      "files_affected": [
+        "execution/google_sheets_client.py",
+        "execution/send_pending_emails.py",
+        "execution/maintain_leads.py"
+      ]
+    }
+  },
+  "lessons_learned": [
+    "Always verify column indices match header structure before hardcoding",
+    "Never place critical code after continue/return statements",
+    "Use helper functions to derive column letters from header names",
+    "Test all conditional branches to ensure code executes",
+    "Create shared constants for column mappings across files"
+  ],
+  "last_updated": "2026-01-08"
+}
+

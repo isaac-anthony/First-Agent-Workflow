@@ -1,6 +1,6 @@
 # Gmail MCP Setup Guide
 
-This guide will help you set up the Gmail MCP server in Cursor so you can send emails from your address (`04isaacag@gmail.com`) using AI.
+This guide will help you set up the Gmail MCP server in Cursor so you can send emails from your address (`brineaiconsulting@gmail.com`) using AI.
 
 ## Step 1: Generate a Gmail App Password
 
@@ -18,7 +18,7 @@ To allow the script to send emails through your Gmail account securely, you need
 Your `.env` file is already updated with your Gmail address and App Password. You don't need to do anything here!
 
 Current settings in `.env`:
-*   `EMAIL_FROM=04isaacag@gmail.com`
+*   `EMAIL_FROM=brineaiconsulting@gmail.com`
 *   `EMAIL_PASSWORD=****` (App Password configured)
 *   `SENDER_NAME=Isaac Gutierrez`
 

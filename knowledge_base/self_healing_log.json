@@ -1,0 +1,836 @@
+{
+  "issues_detected": [],
+  "issues_prevented": [
+    {
+      "timestamp": "2026-01-09T15:53:55.088345",
+      "issue_type": "duplicate_email",
+      "reason": "Status indicates already processed: pending",
+      "email": "mfreeman@os2healthcaresolutions.com",
+      "context": "OS2 Healthcare Solutions"
+    },
+    {
+      "timestamp": "2026-01-09T15:53:55.231244",
+      "issue_type": "duplicate_email",
+      "reason": "Status indicates already processed: pending",
+      "email": "melissa@joinconnexus.com",
+      "context": "Connexus"
+    },
+    {
+      "timestamp": "2026-01-09T15:53:55.374212",
+      "issue_type": "duplicate_email",
+      "reason": "Status indicates already processed: pending",
+      "email": "sean@tierlevel.com",
+      "context": "Tier Level Digital Marketing"
+    },
+    {
+      "timestamp": "2026-01-09T15:53:55.498410",
+      "issue_type": "duplicate_email",
+      "reason": "Status indicates already processed: pending",
+      "email": "qureshi@acedeals.co",
+      "context": "ACE Capital Group"
+    },
+    {
+      "timestamp": "2026-01-09T15:53:55.618111",
+      "issue_type": "duplicate_email",
+      "reason": "Status indicates already processed: pending",
+      "email": "daniel@threepillarcommunities.com",
+      "context": "Three Pillar Communities"
+    },
+    {
+      "timestamp": "2026-01-09T15:53:55.738211",
+      "issue_type": "duplicate_email",
+      "reason": "Status indicates already processed: pending",
+      "email": "danny@cinemasecrets.com",
+      "context": "Cinema Secrets"
+    },
+    {
+      "timestamp": "2026-01-09T15:53:55.904750",
+      "issue_type": "duplicate_email",
+      "reason": "Status indicates already processed: pending",
+      "email": "lise@studiogrow.co",
+      "context": "Studio Grow"
+    },
+    {
+      "timestamp": "2026-01-09T15:53:56.028061",
+      "issue_type": "duplicate_email",
+      "reason": "Status indicates already processed: pending",
+      "email": "kasim@paretotalent.com",
+      "context": "Pareto Talent"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:10.674409",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "example@youremail.com",
+      "context": "Alter Tax Solutions LLC"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:10.920866",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "jennyparkcpa@gmail.com",
+      "context": "JL CPA & Co"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:11.247496",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "info@yicocpa.com",
+      "context": "Yi & Company, CPA"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:11.538693",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "starbuckscpa@gmail.com",
+      "context": "CHARLIE KIM CPA (\ucc30\ub9ac\ud0b4 \uacf5\uc778\ud68c\uacc4\uc0ac)"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:11.809735",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "info@bharmalcpas.com",
+      "context": "Bharmal & Associates, Inc."
+    },
+    {
+      "timestamp": "2026-01-09T15:56:12.062604",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "irvineacrepair@gmail.com",
+      "context": "Irvine Air Conditioning & Refrigeration"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:12.302723",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "info@maydayair.com",
+      "context": "MAYDAY Heating and Air Conditioning Irvine"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:12.589072",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "irvineairhvac@gmail.com",
+      "context": "Irvine Air"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:12.835754",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "cfelder@felair.com",
+      "context": "Fel Air Heating And Air Conditioning"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:13.111024",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "ron@mcmasterair.com",
+      "context": "McMaster Heating & Air Conditioning, Inc"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:13.360692",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "info@blalock-electric.com",
+      "context": "Blalock Electric & Solar Inc"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:13.636219",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "matt@markhamenergy.com",
+      "context": "Markham Energy Consulting"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:13.876052",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "impallari@gmail.com",
+      "context": "Solar Preppers llc"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:14.157999",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "support@underlineconcepts.com",
+      "context": "Underline Energy Concepts"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:14.395704",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "info@newdaysolar.com",
+      "context": "New Day Solar"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:14.682354",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "bruce@sandiegosolarinstall.com",
+      "context": "san diego solar install"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:14.954638",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "info@socalsolarpro.com",
+      "context": "SoCal Solar Pro"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:15.208451",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "support@pacificsuntech.com",
+      "context": "Pacific Sun Technologies, Inc"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:15.466998",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "info@transformpower.com",
+      "context": "Transform Power - Solar Installer"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:15.732743",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "hr@sempersolaris.com",
+      "context": "Semper Solaris"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:16.028381",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "office@solartimeusa.com",
+      "context": "Solartime USA"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:16.276642",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "example@gmail.com",
+      "context": "Sunrgy Solar Distribution"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:16.528987",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "wpgod@gmail.com",
+      "context": "O3 Energy Solutions"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:16.786364",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "support@vantagepointsolar.com",
+      "context": "Vantage Point Solar"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:17.032218",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "info@smoothsolarpower.com",
+      "context": "Smooth Solar Power"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:17.332466",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "info@solratech.us",
+      "context": "SolRa Tech"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:17.570422",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "customersuccess@texasdirectsolar.com",
+      "context": "Texas Direct Solar"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:17.833313",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "info@kw.solar",
+      "context": "KW Solar: Houston Solar Panel Installers"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:18.084137",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "partners@solstice-solar.com",
+      "context": "Solstice Solar"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:18.353266",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "info@texsolarenergy.com",
+      "context": "Texas Solar Energy"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:18.594686",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "steve@phoenixsolarpanelsystems.com",
+      "context": "Phoenix Solar Panel Systems LLC"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:18.879000",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "info@envnow.com",
+      "context": "Envision Solar Inc"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:19.124600",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "info@pepsolar.com",
+      "context": "PEP Solar"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:19.401828",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "email@example.com",
+      "context": "Phoenix Valley Solar"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:19.646845",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "info@independentsolar.com",
+      "context": "Independent Solar"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:19.926025",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "rocketroof@yahoo.com",
+      "context": "Rocket Roofing"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:20.173800",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "info@costarroofinginc.com",
+      "context": "Costar Roofing Los Angeles"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:20.451129",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "info@centralroof.com",
+      "context": "Central Roofing"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:20.699967",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "sales@comroofconcepts.com",
+      "context": "Commercial Roofing Concepts, Inc."
+    },
+    {
+      "timestamp": "2026-01-09T15:56:20.975618",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "info@ecosmartsf.com",
+      "context": "Eco Smart Roofer"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:21.216957",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "info@royalroofingca.com",
+      "context": "Royal Roofing CA"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:21.513302",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "7x7scheduling@gmail.com",
+      "context": "7x7 Roofing"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:21.796125",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "service@dallascommercialroofingcompany.net",
+      "context": "Dallas Commercial Roofing Co."
+    },
+    {
+      "timestamp": "2026-01-09T15:56:22.133360",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "info@texaselitecommercialroofing.com",
+      "context": "Texas Elite Commercial Roofing"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:22.358805",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "info@longhorncommercialroofingdallas.com",
+      "context": "Longhorn Commercial Roofing Dallas"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:22.671711",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "greenstarjobs@gmail.com",
+      "context": "Green Star Commercial Roofing"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:22.909961",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "hello@shepherdcommercialroofing.com",
+      "context": "Shepherd Commercial Roofing"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:23.188181",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "thelmachapma88@gmail.com",
+      "context": "HVAC of Los Angeles"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:23.458526",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "user@example.com",
+      "context": "Precise Air Systems Inc."
+    },
+    {
+      "timestamp": "2026-01-09T15:56:23.703856",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "info@homeupgradespecialist.com",
+      "context": "Home Upgrade Specialist Inc (TESLA, HVAC, ROOF, SOLAR)"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:23.925812",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "reliablehvacla@gmail.com",
+      "context": "Reliable Heating and Air"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:24.233785",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "hightechhvacservices@gmail.com",
+      "context": "High Tech HVAC - AC Repair & Installation Services in Los Angeles, Ventura County, Orange County, Riverside County"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:24.475479",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "jornelas@brafflawfirm.com",
+      "context": "Braff Law Car Accident Personal Injury Lawyers"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:24.755045",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "info@thelalawfirm.com",
+      "context": "The L.A. Law Firm - Car Accident & Personal Injury Attorneys"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:24.997926",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "info@mylawcompany.com",
+      "context": "M&Y Personal Injury Lawyers"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:25.293485",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "online@dominguezfirm.com",
+      "context": "The Dominguez Firm - Personal Injury Lawyers"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:25.542210",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "info@kashlegal.com",
+      "context": "Kash Legal Group"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:25.807990",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "info@solarflexion.com",
+      "context": "Solarflexion, Inc"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:26.088047",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "youraddress@yourdomain.com",
+      "context": "Celestial Solar & Water Systems, Inc"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:26.336462",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "info@underlineconcepts.com",
+      "context": "Underline Energy Concepts"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:26.576289",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "sasha@switch-ca.com",
+      "context": "SWITCH solar - Switch Solutions LLC"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:26.852110",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "info@optimumsolarpower.com",
+      "context": "Optimum Solar Power Inc"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:27.077296",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "sales@pacificsuntech.com",
+      "context": "Pacific Sun Technologies, Inc"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:27.385975",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "info@harris-solar.com",
+      "context": "Harris Solar Panel Cleaning"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:27.627643",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "freedomforever@interdependence.com",
+      "context": "Freedom Forever"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:27.909078",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "info@solarnegotiators.com",
+      "context": "Solar Negotiators"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:28.154360",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "office@stevanburen.com",
+      "context": "Stevan Buren Commercial Roofing Dallas"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:28.440226",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "office@priorityroofs.com",
+      "context": "Priority Roofing"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:28.682829",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "info@unitedroofers.co",
+      "context": "United Roofing & General Contractors"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:28.963524",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "wweeiihhuuaanngg@gmail.com",
+      "context": "Dallas Commercial Roofing"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:29.205781",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "vic@newviewroofing.com",
+      "context": "New View Roofing"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:29.487753",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "customerservice@carriereac.com",
+      "context": "Carriere HVAC-Electric Inc"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:29.733997",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "info@commercialhvacofhouston.com",
+      "context": "Commercial HVAC of Houston"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:30.003142",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "75degreeacservices@gmail.com",
+      "context": "75 Degree AC- Houston"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:30.254827",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "info@houstonhvac.com",
+      "context": "Houston HVAC"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:30.533556",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "info@excelairconditioning.com",
+      "context": "Excel Air"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:30.778057",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "intake@kellylawteam.com",
+      "context": "Kelly Law Team Phoenix"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:31.057565",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "info@mooreinjurylaw.com",
+      "context": "Moore Injury Law"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:31.301764",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "johndoe@gmail.com",
+      "context": "Big Auto Accident Attorneys"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:31.572445",
+      "issue_type": "duplicate_email",
+      "reason": "Email sent recently (within last hour); Invalid lead_name detected (likely column mix-up); Potential column index confusion detected",
+      "email": "info@themorganconnection.com",
+      "context": "Morgan & Morgan"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:31.847901",
+      "issue_type": "duplicate_email",
+      "reason": "Already contacted (Contacted? = Yes); Email sent recently (within last hour)",
+      "email": "service@indigosolarenergy.com",
+      "context": "Indigo Solar Energy"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:32.150189",
+      "issue_type": "duplicate_email",
+      "reason": "Already contacted (Contacted? = Yes); Email sent recently (within last hour)",
+      "email": "user@domain.com",
+      "context": "Underline Energy Concepts"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:32.394782",
+      "issue_type": "duplicate_email",
+      "reason": "Already contacted (Contacted? = Yes); Email sent recently (within last hour)",
+      "email": "squreshi@optimumsolarpower.com",
+      "context": "Optimum Solar Power Inc"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:32.638204",
+      "issue_type": "duplicate_email",
+      "reason": "Already contacted (Contacted? = Yes); Email sent recently (within last hour)",
+      "email": "info@formesolar.com",
+      "context": "Forme Solar - Los Angeles"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:32.895317",
+      "issue_type": "duplicate_email",
+      "reason": "Already contacted (Contacted? = Yes); Email sent recently (within last hour)",
+      "email": "%20bruce@sandiegosolarinstall.com",
+      "context": "san diego solar install"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:33.224195",
+      "issue_type": "duplicate_email",
+      "reason": "Already contacted (Contacted? = Yes); Email sent recently (within last hour)",
+      "email": "johndoe@example.com",
+      "context": "Semper Solaris"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:33.554053",
+      "issue_type": "duplicate_email",
+      "reason": "Already contacted (Contacted? = Yes); Email sent recently (within last hour)",
+      "email": "info@murrietasolarpower.com",
+      "context": "Murrieta Solar Power"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:33.869022",
+      "issue_type": "duplicate_email",
+      "reason": "Already contacted (Contacted? = Yes); Email sent recently (within last hour)",
+      "email": "info@peachstateinc.com",
+      "context": "Peach State Roofing Inc"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:34.182803",
+      "issue_type": "duplicate_email",
+      "reason": "Already contacted (Contacted? = Yes); Email sent recently (within last hour)",
+      "email": "nashville@priorityroofs.com",
+      "context": "Priority Roofing"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:34.495238",
+      "issue_type": "duplicate_email",
+      "reason": "Already contacted (Contacted? = Yes); Email sent recently (within last hour)",
+      "email": "andy@newviewroofing.com",
+      "context": "New View Roofing"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:34.799038",
+      "issue_type": "duplicate_email",
+      "reason": "Already contacted (Contacted? = Yes); Email sent recently (within last hour)",
+      "email": "uptownair@gmail.com",
+      "context": "Uptown Heating & Air Conditioning"
+    },
+    {
+      "timestamp": "2026-01-09T15:56:35.032223",
+      "issue_type": "duplicate_email",
+      "reason": "Already contacted (Contacted? = Yes); Email sent recently (within last hour)",
+      "email": "info@bigauto.com",
+      "context": "Big Auto Accident Attorneys"
+    }
+  ],
+  "patterns_learned": {},
+  "last_audit": {
+    "timestamp": "2026-01-08T06:09:24.357969",
+    "tab": "Sheet2",
+    "issues_found": [
+      "Row 2: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 3: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 4: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 5: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 6: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 7: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 8: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 9: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 10: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 11: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 12: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 13: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 14: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 15: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 16: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 17: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 18: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 19: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 20: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 21: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 22: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 23: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 24: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 25: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 26: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 27: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 28: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 29: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 30: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 31: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 32: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 33: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 34: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 35: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 36: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 37: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 38: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 39: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 40: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 41: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 42: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 43: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 44: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 45: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 46: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 47: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 48: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 49: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 50: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 51: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 52: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 53: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 54: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 55: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 56: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 57: Invalid lead_name 'Yes' (likely column mix-up)",
+      "Row 58: Invalid lead_name 'Yes' (likely column mix-up)"
+    ],
+    "fixes_applied": [
+      "Row 2: Fixed invalid lead_name",
+      "Row 3: Fixed invalid lead_name",
+      "Row 4: Fixed invalid lead_name",
+      "Row 5: Fixed invalid lead_name",
+      "Row 6: Fixed invalid lead_name",
+      "Row 7: Fixed invalid lead_name",
+      "Row 8: Fixed invalid lead_name",
+      "Row 9: Fixed invalid lead_name",
+      "Row 10: Fixed invalid lead_name",
+      "Row 11: Fixed invalid lead_name",
+      "Row 12: Fixed invalid lead_name",
+      "Row 13: Fixed invalid lead_name",
+      "Row 14: Fixed invalid lead_name",
+      "Row 15: Fixed invalid lead_name",
+      "Row 16: Fixed invalid lead_name",
+      "Row 17: Fixed invalid lead_name",
+      "Row 18: Fixed invalid lead_name",
+      "Row 19: Fixed invalid lead_name",
+      "Row 20: Fixed invalid lead_name",
+      "Row 21: Fixed invalid lead_name",
+      "Row 22: Fixed invalid lead_name",
+      "Row 23: Fixed invalid lead_name",
+      "Row 24: Fixed invalid lead_name",
+      "Row 25: Fixed invalid lead_name",
+      "Row 26: Fixed invalid lead_name",
+      "Row 27: Fixed invalid lead_name",
+      "Row 28: Fixed invalid lead_name",
+      "Row 29: Fixed invalid lead_name",
+      "Row 30: Fixed invalid lead_name",
+      "Row 31: Fixed invalid lead_name",
+      "Row 32: Fixed invalid lead_name",
+      "Row 33: Fixed invalid lead_name",
+      "Row 34: Fixed invalid lead_name",
+      "Row 35: Fixed invalid lead_name",
+      "Row 36: Fixed invalid lead_name",
+      "Row 37: Fixed invalid lead_name",
+      "Row 38: Fixed invalid lead_name",
+      "Row 39: Fixed invalid lead_name",
+      "Row 40: Fixed invalid lead_name",
+      "Row 41: Fixed invalid lead_name",
+      "Row 42: Fixed invalid lead_name",
+      "Row 43: Fixed invalid lead_name",
+      "Row 44: Fixed invalid lead_name",
+      "Row 45: Fixed invalid lead_name",
+      "Row 46: Fixed invalid lead_name",
+      "Row 47: Fixed invalid lead_name",
+      "Row 48: Fixed invalid lead_name",
+      "Row 49: Fixed invalid lead_name",
+      "Row 50: Fixed invalid lead_name",
+      "Row 51: Fixed invalid lead_name",
+      "Row 52: Fixed invalid lead_name",
+      "Row 53: Fixed invalid lead_name",
+      "Row 54: Fixed invalid lead_name",
+      "Row 55: Fixed invalid lead_name",
+      "Row 56: Fixed invalid lead_name",
+      "Row 57: Fixed invalid lead_name",
+      "Row 58: Fixed invalid lead_name"
+    ],
+    "statistics": {
+      "total_leads": 57,
+      "contacted": 0,
+      "not_contacted": 57,
+      "status_pending": 57,
+      "potential_issues": 57
+    },
+    "summary": "Audited 57 leads. Found 57 issues, applied 57 fixes."
+  }
+}

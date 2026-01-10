@@ -27,7 +27,7 @@ class ReportingAgent:
         self.sheets = GoogleSheetsClient(self.spreadsheet_id)
         self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
         self.learner = LearningAgent()
-        self.recipient = "04isaacag@gmail.com"
+        self.recipient = os.getenv("REPORT_EMAIL", "04isaacag@gmail.com")
 
     async def _generate_pdf(self, html_content: str, output_path: str):
         """Generates a PDF from HTML content using Playwright."""
@@ -56,9 +56,10 @@ class ReportingAgent:
         
         scores = []
         
-        for tab in all_tabs:
-            if tab in ["Weekly_Reports", "Sheet1"]: continue
-            
+        # Focus on Sheet2 (main lead sheet)
+        target_tabs = ["Sheet2"] if "Sheet2" in all_tabs else [tab for tab in all_tabs if tab not in ["Weekly_Reports", "Sheet1"]]
+        
+        for tab in target_tabs:
             rows = self.sheets.get_all_values(tab)
             if not rows or len(rows) <= 1: continue
             
@@ -70,7 +71,13 @@ class ReportingAgent:
                 col_status = headers.index("Status")
                 col_score = headers.index("AI Lead Score")
             except ValueError:
-                continue # Skip tabs that don't match the lead format
+                # Try alternative column names
+                try:
+                    col_contacted = headers.index("Contacted")
+                    col_status = headers.index("Status")
+                    col_score = headers.index("Score")
+                except ValueError:
+                    continue # Skip tabs that don't match the lead format
             
             tab_interested = 0
             for row in data:

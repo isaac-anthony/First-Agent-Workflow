@@ -19,11 +19,17 @@ class LearningAgent:
         self.client = OpenAI(api_key=self.api_key) if self.api_key else None
         self.kb_path = os.path.join(os.path.dirname(__file__), "..", "knowledge_base", "brine_faq.md")
         self.stats_path = os.path.join(os.path.dirname(__file__), "..", "knowledge_base", "learning_stats.json")
+        self.qa_db_path = os.path.join(os.path.dirname(__file__), "..", "knowledge_base", "question_learning.json")
         
         # Initialize stats if not exists
         if not os.path.exists(self.stats_path):
             with open(self.stats_path, 'w') as f:
                 json.dump({"questions": {}, "unanswered": []}, f)
+        
+        # Initialize Q&A database if not exists
+        if not os.path.exists(self.qa_db_path):
+            with open(self.qa_db_path, 'w') as f:
+                json.dump({"qa_pairs": [], "confidence_scores": {}}, f)
 
     def _get_kb_content(self) -> str:
         with open(self.kb_path, 'r') as f:
@@ -157,6 +163,116 @@ class LearningAgent:
             report += "Your knowledge base is performing well! No critical gaps found."
             
         return report
+
+    def analyze_question(self, question_text: str, thread_id: str = None, manual_answer: str = None):
+        """
+        Analyzes a question and learns from manual answers.
+        Stores question-answer pairs for future reference and confidence improvement.
+        """
+        if not self.client:
+            return
+        
+        # Load Q&A database
+        try:
+            with open(self.qa_db_path, 'r') as f:
+                qa_db = json.load(f)
+        except:
+            qa_db = {"qa_pairs": [], "confidence_scores": {}}
+        
+        # Analyze question
+        prompt = f"""
+        You are analyzing a question from a lead to improve the knowledge base.
+        
+        ### QUESTION:
+        "{question_text}"
+        
+        ### MANUAL ANSWER (if provided):
+        {manual_answer if manual_answer else "No manual answer yet - this is a new question"}
+        
+        ### EXISTING Q&A DATABASE:
+        {json.dumps(qa_db['qa_pairs'][-5:], indent=2) if qa_db['qa_pairs'] else "No previous Q&A pairs"}
+        
+        ### YOUR TASK:
+        1. Extract the core question (normalized form)
+        2. If manual_answer is provided, store the Q&A pair
+        3. Determine if this question is similar to any existing questions
+        4. Calculate confidence that we can answer this based on knowledge base
+        
+        Return JSON:
+        {{
+            "core_question": "<normalized question>",
+            "question_type": "<pricing|technical|capability|process|comparison|general>",
+            "has_answer": <bool>,
+            "confidence": <float 0.0-1.0>,
+            "similar_questions": ["<list of similar questions if any>"]
+        }}
+        """
+        
+        try:
+            response = self.client.chat.completions.create(
+                model="gpt-4o",
+                messages=[
+                    {"role": "system", "content": "You are a knowledge management expert. Respond only in JSON."},
+                    {"role": "user", "content": prompt}
+                ],
+                temperature=0,
+                response_format={"type": "json_object"}
+            )
+            analysis = json.loads(response.choices[0].message.content)
+            
+            # Store Q&A pair if manual answer provided
+            if manual_answer:
+                qa_pair = {
+                    "question": analysis.get("core_question", question_text),
+                    "answer": manual_answer,
+                    "question_type": analysis.get("question_type", "general"),
+                    "thread_id": thread_id,
+                    "timestamp": str(os.path.getmtime(self.qa_db_path) if os.path.exists(self.qa_db_path) else "")
+                }
+                qa_db["qa_pairs"].append(qa_pair)
+                
+                # Update confidence score for this question type
+                q_type = analysis.get("question_type", "general")
+                if q_type not in qa_db["confidence_scores"]:
+                    qa_db["confidence_scores"][q_type] = []
+                qa_db["confidence_scores"][q_type].append(1.0)  # Manual answer = 100% confidence
+                
+                # Save updated database
+                with open(self.qa_db_path, 'w') as f:
+                    json.dump(qa_db, f, indent=4)
+                
+                print(f"🧠 Learned new Q&A pair: {analysis.get('core_question', question_text)[:50]}...")
+            
+            return analysis
+        except Exception as e:
+            print(f"Error analyzing question: {e}")
+            return None
+
+    def get_confidence_for_question(self, question_text: str) -> float:
+        """
+        Gets confidence score for answering a question based on learned Q&A pairs.
+        Returns confidence (0.0-1.0) based on similar questions in database.
+        """
+        try:
+            with open(self.qa_db_path, 'r') as f:
+                qa_db = json.load(f)
+        except:
+            return 0.5  # Default medium confidence
+        
+        # Check if similar questions exist in database
+        similar_count = 0
+        total_confidence = 0.0
+        
+        for qa_pair in qa_db.get("qa_pairs", []):
+            # Simple similarity check (can be enhanced with embeddings)
+            if any(word in question_text.lower() for word in qa_pair["question"].lower().split()[:5]):
+                similar_count += 1
+                total_confidence += 1.0
+        
+        if similar_count > 0:
+            return min(1.0, total_confidence / max(1, similar_count))
+        
+        return 0.5  # Default if no similar questions found
 
 if __name__ == "__main__":
     # Small test
